@@ -9,11 +9,13 @@
 \usepackage{color}
 \usepackage{url}
 
-\title{ExperimentaciÛn con algoritmos distribuidos usando herramientas libres y gratuitas}
+% he insertado los comentarios y correcciones de pedro y lo a√±ado como autor
 
-\author{Dr. Juan Juli·n Merelo GuervÛs, Dra. Maribel GarcÌa Arenas (Universidad de Granada)\\
-Dr. Rodolfo GarcÌa Berm˙dez (Universidad de HolguÌn) y \\
-MSc. JosÈ Albert Cruz Almaguer (Universidad de las Ciencias Inform·ticas, La Habana)
+\title{Experimentaci√≥n con algoritmos distribuidos usando herramientas libres y gratuitas}
+
+\author{Dr. Juan Juli√°n Merelo Guerv√≥s, Dra. Maribel Garc√≠a Arenas, Pedro A. Castillo Valdivieso (Universidad de Granada)\\
+Dr. Rodolfo Garc√≠a Berm√∫dez (Universidad de Holgu√≠n) y \\
+MSc. Jos√© Albert Cruz Almaguer (Universidad de las Ciencias Inform√°ticas, La Habana)
 }
 
 \begin{document}
@@ -21,276 +23,298 @@ MSc. JosÈ Albert Cruz Almaguer (Universidad de las Ciencias Inform·ticas, La Hab
 \maketitle
 
 \begin{abstract}
-En un entorno de restricciÛn de costes para grandes instalaciones
-computacionales acompaÒado de la existencia de herramientas en la nube
-y ordenadores de sobremesa de altas capacidades, la experimentaciÛn
-con algoritmos distribuidos se puede hacer f·cilmente combinando ambas
-cosas. En este trabajo se presenta una metodologÌa de experimentaciÛn
-con algoritmos genÈticos distribuidos usando servicios de
+En un entorno de restricci√≥n de costes para grandes instalaciones
+computacionales, acompa√±ado de la existencia de herramientas en la nube
+y ordenadores de sobremesa de altas capacidades, la experimentaci√≥n
+con algoritmos distribuidos se puede hacer f√°cilmente combinando ambas
+cosas. En este trabajo se presenta una metodolog√≠a de experimentaci√≥n
+con algoritmos gen√©ticos distribuidos usando servicios de
 almacenamiento en la nube tales como Dropbox (o alternativas libres
-auto-instalables) y aplicaciones para gestiÛn de m·quinas virtuales
+auto-instalables) y aplicaciones para gesti√≥n de m√°quinas virtuales
 tales como VirtualBox. Usando el almacenamiento en la nube como un
 sistema de intercambio de soluciones entre los diferentes nodos, se
-tratar· de probar la aplicabilidad de esta metodologÌa asÌ como probar
+tratar√° de probar la aplicabilidad de esta metodolog√≠a as√≠ como probar
 las capacidades de estos nuevos algoritmos evolutivos distribuidos. 
 \end{abstract}
 
-\section{IntroducciÛn}
+\section{Introducci√≥n}
 
-La computaciÛn paralela no necesita ser complicada y prever escenarios
-complicados o grandes variaciones de estructura de los programas
+La computaci√≥n paralela no necesita ser complicada y prever escenarios
+complejos o grandes variaciones de estructura de los programas
 secuenciales. La mayor parte de los ordenadores actuales pueden
-trabajar cÛmodamente con muchos procesos ejecut·ndose simult·neamente
-y poseen sistemas de almacenamiento r·pido que pueden usarse para
-intercambiar informaciÛn. Implementar un algoritmo que funcione de
+trabajar c√≥modamente con muchos procesos ejecut√°ndose simult√°neamente
+y poseen sistemas de almacenamiento r√°pido que pueden usarse para
+intercambiar informaci√≥n. Implementar un algoritmo que funcione de
 forma concurrente es, por lo tanto, tan simple como ejecutar varios
-procesos simult·neamente y que intercambien informaciÛn a travÈs de un
+procesos simult√°neamente y que intercambien informaci√≥n a trav√©s de un
 directorio especialmente designado para ello. La eficiencia de la
-implementaciÛn no tiene por quÈ ser grande (y depender· sobre todo del
-tipo de procesador, del n˙mero de n˙cleos que posea y de la velocidad
+implementaci√≥n no tiene por qu√© ser grande (y depender√° sobre todo del
+tipo de procesador, del n√∫mero de n√∫cleos que posea y de la velocidad
 y eficiencia del sistema de ficheros) pero, sin embargo, la
-simplicidad en la programaciÛn es tal que puede compensar la menor
+simplicidad en la programaci√≥n es tal que puede compensar la menor
 ganancia en velocidad obtenida de esta forma. 
+% - pedro -
+Adem√°s, a√±adir nuevos nodos de computaci√≥n al sistema paralelo distribuido 
+resultar√° extremadamente simple.
 
-Simult·neamente, est· cada vez m·s vigente el uso de infraestructuras
+Simult√°neamente, est√° cada vez m√°s vigente el uso de infraestructuras
 {\em nube} que permiten usar desde un ordenador conectado a la red
 diferentes recursos tales como CPUs virtuales o discos duros
 virtuales. El hecho de que sean {\em virtuales} implica que aparezcan,
-desde el punto de vista del interfaz de programaciÛn, como si se
+desde el punto de vista del interfaz de programaci√≥n, como si se
 tratara de otras infraestructuras disponibles desde el sistema
-operativo. En la pr·ctica, podemos usar un disco duro remoto situado
+operativo. En la pr√°ctica, podemos usar un disco duro remoto situado
 en la nube como si se tratara de un disco duro local. De esta forma,
-tambiÈn simple y transparente al programador podemos paralelizar un
+tambi√©n simple y transparente al programador podemos paralelizar un
 algoritmo, simplemente usando una infraestructura de almacenamiento
 virtual. A la vez, en algunos casos estas infraestructuras son
 gratuitas, bien por el hecho de que formen parte de la misma
-organizaciÛn (discos conectados a la red, NAS o bien infraestructuras
+organizaci√≥n (discos conectados a la red, NAS o bien infraestructuras
 creadas con OpenStack u OpenNebula) o bien porque se trate de
-productos comerciales que poseen una versiÛn gratuita, como se trata
+productos comerciales que poseen una versi√≥n gratuita, como se trata
 de Dropbox, Ubuntu One u otros. 
 
-En este trabajo mostramos la primera aproximaciÛn al uso de
-infraestructuras virtuales para la creaciÛn de experimentos de
-computaciÛn distribuida de forma gratuita. Estos experimentos los
-aplicaremos a un tipo de algoritmo denominado algoritmo genÈtico. 
+En este trabajo mostramos la primera aproximaci√≥n al uso de
+infraestructuras virtuales para la creaci√≥n de experimentos de
+computaci√≥n distribuida de forma gratuita. Estos experimentos los
+aplicaremos a un tipo de algoritmo denominado algoritmo gen√©tico. 
+% - pedro - ¬øno deber√≠amos referenciar los trabajos del dropbox anteriores?
 
-Los algoritmos genÈticos \cite{guervos2010informatica} son mÈtodos de b˙squeda y optimizaciÛn
-inspirados en la selecciÛn natural propuesta por
+%AUTORES: M.G. Arenas, J.J. Merelo, A.M. Mora, P.A. Castillo, G. Romero, J.L.J. Laredo
+%TIÃÅTULO: Assessing speed-ups in commodity cloud storage services for distributed evolutionary algorithms TIPO DE PARTICIPACIOÃÅN: Oral
+%CONGRESO: 2011 IEEE Congress on Evolutionary Computation
+%PUBLICACIOÃÅN: isbn 978-1-4244-7833-0/11 pp.304-311. 2011
+
+%AUTORES: M. GarciÃÅa-Arenas, J.J. Merelo, Pedro A. Castillo, J.L.J. Laredo, G. Romero and Antonio Miguel Mora 
+%TIÃÅTULO: Using free cloud storage services for distributed evolutionary algorithms
+%CONGRESO: 13th Annual Genetic and Evolutionary Computation Conference, GECCO 2011
+%PUBLICACIOÃÅN: Proceedings, Dublin, Ireland, July 12-16, 2011. Natalio Krasnogor and Pier Luca Lanzi, Editors. ACM. pages 1603-1610. isbn 978-1-4503-0557-0. 2011
+
+%AUTORES: Maribel Garcia-Arenas, Pedro Castillo Valdivieso, Gustavo Romero Lopez and Juan Julian Merelo Guervos 
+%TIÃÅTULO: Cloud-based Evolutionary Parallel Computation using low cost storage services
+%PUBLICACIOÃÅN: IEEE First International Symposium on Network Cloud Computing and Applications. isbn: 978-0-7695-4550- 9/11. pp.56-61. 2011. DOI 10.1109/NCCA.2011.16. 2011
+
+
+Los algoritmos gen√©ticos \cite{guervos2010informatica} son m√©todos de b√∫squeda y optimizaci√≥n
+inspirados en la selecci√≥n natural propuesta por
 Darwin. Un algoritmo evolutivo codifica un problema en unas
 estructuras de datos generalmente denominadas {\em cromosomas} y que
-son una representaciÛn inform·tica de los par·metros necesarios para
-resolverlo; por ejemplo, resolver el recorrido del viajante implicarÌa
+son una representaci√≥n inform√°tica de los par√°metros necesarios para
+resolverlo; por ejemplo, resolver el recorrido del viajante implicar√≠a
 codificar en un {\em cromosoma} la lista de las ciudades a visitar; un
-problema que tuviera varios n˙meros reales como par·metros usarÌa una
-representaciÛn binaria con una precisiÛn determinada de tales
-par·metros, esta representaciÛn binaria es la que se usa en muchos
-problemas numÈricos y ser· la que usemos aquÌ por simple
+problema que tuviera varios n√∫meros reales como par√°metros usar√≠a una
+representaci√≥n binaria con una precisi√≥n determinada de tales
+par√°metros, esta representaci√≥n binaria es la que se usa en muchos
+problemas num√©ricos y ser√° la que usemos aqu√≠ por simple
 conveniencia. 
 
-Un algoritmo genÈtico necesita una funciÛn de adecuaciÛn o {\em
+Un algoritmo gen√©tico necesita una funci√≥n de adecuaci√≥n o {\em
   fitness} que nos permita evaluar lo que se acerca cada {\em
-  cromosoma} a la soluciÛn. Esta funciÛn permite comparar diferentes
+  cromosoma} a la soluci√≥n. Esta funci√≥n permite comparar diferentes
 cromosomas y en principio y para simplificar, podemos pensar que es un
-solo n˙mero real, aunque puede ser un vector o incluso tratarse de una
-evaluaciÛn por parte de un usuario. La cuestiÛn es que esta funciÛn
-nos debe permitir evaluar quÈ cromosoma codifica una mejor soluciÛn al
+solo n√∫mero real, aunque puede ser un vector o incluso tratarse de una
+evaluaci√≥n por parte de un usuario. La cuesti√≥n es que esta funci√≥n
+nos debe permitir evaluar qu√© cromosoma codifica una mejor soluci√≥n al
 problema que tratamos de resolver.
 
 Una vez establecidos estos dos componentes del algoritmo, un algoritmo
 evolutivo procede de la forma siguiente\begin{enumerate}
-\item Se general una poblaciÛn de cromosomas de tamaÒo $P$ y se eval˙a
-\item Mientras no se cumpla una condiciÛn de terminaciÛn (n˙mero de
-  iteraciones, acercamiento a la soluciÛn o bien haber encontrado la
-  soluciÛn, por ejemplo)\begin{enumerate}
-  \item Escoger (de diferentes formas posibles) quÈ miembros de la
-    poblaciÛn van a reproducirse, es decir, ser transformados para
-    pasar a la siguiente iteraciÛn (denominada habitualmente {\em
-      generaciÛn}, por el sÌmil con la evoluciÛn natural.
+\item Se genera una poblaci√≥n de cromosomas de tama√±o $P$ y se eval√∫a
+\item Mientras no se cumpla una condici√≥n de terminaci√≥n (n√∫mero de
+  iteraciones, acercamiento a la soluci√≥n o bien haber encontrado la
+  soluci√≥n, por ejemplo)\begin{enumerate}
+  \item Escoger (de diferentes formas posibles) qu√© miembros de la
+    poblaci√≥n van a reproducirse, es decir, ser transformados para
+    pasar a la siguiente iteraci√≥n (denominada habitualmente {\em
+      generaci√≥n}, por el s√≠mil con la evoluci√≥n natural.
   \item Cambiar una parte del cromosoma ({\em mutar}) o combinar dos
-    soluciones ({\em entrecruzamiento}) para dar una nueva generaciÛn
+    soluciones ({\em entrecruzamiento}) para dar una nueva generaci√≥n
     de cromosomas.
-  \item Evaluar los nuevos individuos. Insertar esta nueva poblaciÛn
-    en la poblaciÛn antigua, eliminando (en general) los peores. 
+  \item Evaluar los nuevos individuos. Insertar esta nueva poblaci√≥n
+    en la poblaci√≥n antigua, eliminando (en general) los peores. 
   \end{enumerate}
 \end{enumerate}
 
 Desde el punto de vista de este trabajo, lo interesante de los
-algoritmos evolutivos es que se prestan a una f·cil paralelizaciÛn:
-simplemente dividiendo la poblaciÛn en varias {\em islas} y creando
-alg˙n mecanismo de intercambio de individuos entre las islas.
+algoritmos evolutivos es que se prestan a una f√°cil paralelizaci√≥n:
+simplemente dividiendo la poblaci√≥n en varias {\em islas} y creando  % - pedro -  una cita aqu√≠
+alg√∫n mecanismo de intercambio de individuos entre las islas.
 
 Esto es precisamente lo que vamos a hacer en este trabajo. Usaremos un
-algoritmo genÈtico  que, dividido en varias {\em islas}, intercambiar·
-informaciÛn a travÈs de un directorio compartido. Ese directorio
+algoritmo gen√©tico  que, dividido en varias {\em islas}, intercambiar√°
+informaci√≥n a trav√©s de un directorio compartido. Ese directorio
 compartido puede estar en un servicio tal como Dropbox, pero en este
-caso no haremos experimentos relacionados con esto. Trabajaremos
-adem·s usando un sistema de fuentes abiertas en el que tanto el cÛdigo
-como la experimentaciÛn como este mismo trabajo est·n a disposiciÛn
-de la comunidad cientÌfica desde el momento de su creaciÛn. 
+caso no haremos experimentos relacionados con esto.   % - pedro - esta frase me resulta ¬øcomo contradictoria? da la impresi√≥n de que va a ser que s√≠, pero tras la coma, resulta ser que no!
+Trabajaremos adem√°s usando un sistema de fuentes abiertas en el que tanto el c√≥digo
+como la experimentaci√≥n como este mismo trabajo est√°n a disposici√≥n
+de la comunidad cient√≠fica desde el momento de su creaci√≥n.  % - pedro -  decir d√≥nde estar√°n para bajarlo
 
 Con este trabajo tratamos de demostrar que, usando un mecanismo de
-intercambio a travÈs de almacenamiento, se pueden conseguir mejoras de velocidad incluso en un
-sÛlo ordenador; para ello probaremos desde uno a cuatro
-procesos. Adem·s, haremos ciertos experimentos preliminares que nos
-permitan saber quÈ polÌticas de migraciÛn son las m·s adecuadas.
+intercambio a trav√©s de almacenamiento, se pueden conseguir mejoras de velocidad incluso en un
+s√≥lo ordenador; para ello probaremos desde uno a cuatro
+procesos. Adem√°s, haremos ciertos experimentos preliminares que nos
+permitan saber qu√© pol√≠ticas de migraci√≥n son las m√°s adecuadas.
 
-El resto del trabajo se organiza como sigue: a continuaciÛn exponemos
-los resultados m·s sobresalientes en este ·rea. Posteriormente
-explicamos el algoritmo y la metodologÌa de experimentaciÛn
-usada en la SecciÛn \ref{sec:imp}. Finalmente expondremos los resultados obtenidos y las
+El resto del trabajo se organiza como sigue: a continuaci√≥n exponemos
+los resultados m√°s sobresalientes en este √°rea. Posteriormente
+explicamos el algoritmo y la metodolog√≠a de experimentaci√≥n
+usada en la Secci√≥n \ref{sec:imp}. Finalmente expondremos los resultados obtenidos y las
 conclusiones derivadas de los mismos para terminar con algunas notas
-de trabajo futuro en la SecciÛn \ref{sec:res}. 
+de trabajo futuro en la Secci√≥n \ref{sec:res}. 
 
 
 \section{Estado del arte}
 
-Los principales resultados en este ·rea son de los mismos autores
-\cite{DBLP:conf/cec/ArenasGMCRL11,DBLP:conf/gecco/ArenasGCLRM11,mericloud}. En
-estos trabajos se usÛ un algoritmo evolutivo implementado en Java para
+Los principales resultados en este √°rea son de los mismos autores
+\cite{DBLP:conf/cec/ArenasGMCRL11,DBLP:conf/gecco/ArenasGCLRM11,mericloud}. En   % - pedro -  aqu√≠ s√≠ se citan los trabajos propios anteriores
+estos trabajos se us√≥ un algoritmo evolutivo implementado en Java para
 probar diferentes sistemas gratuitos de almacenamiento en nube tales
 como Dropbox u otros. Como principal resultado se obtuvo el hecho de
-que se conseguÌan escalados interesantes, pero sÛlo con unas pocas
-m·quinas. Adem·s, el retraso en la propagaciÛn de los resultados de
-unas m·quinas a otras implicaba que el problema de optimizaciÛn debÌa
-de ser de cierto tamaÒo para que los resultados fueran
+que se consegu√≠an escalados interesantes, pero s√≥lo con unas pocas
+m√°quinas. Adem√°s, el retraso en la propagaci√≥n de los resultados de
+unas m√°quinas a otras implicaba que el problema de optimizaci√≥n deb√≠a
+de ser de cierto tama√±o para que los resultados fueran
 significativos. El principal problema era que, debido a este retraso
-en la propagaciÛn, la migraciÛn introducÌa tambiÈn un retraso en la
-ejecuciÛn del algoritm para que esta fuera capaz de propagarse. 
+en la propagaci√≥n, la migraci√≥n introduc√≠a tambi√©n un retraso en la
+ejecuci√≥n del algoritm para que esta fuera capaz de propagarse. 
 
 En este trabajo principalmente tratamos de reproducir los resultados
-obtenidos en el mismo con otro tipo de implementaciÛn y, adem·s,
-usando otra implemenatciÛn diferente que tiene como principal
-diferencia el hecho de no tener en cuenta si el algoritmo se est·
+obtenidos en el mismo con otro tipo de implementaci√≥n y, adem√°s,  % - pedro -  indicar qu√© tipo de implementaci√≥n
+usando otra implemenatci√≥n diferente que tiene como principal
+diferencia el hecho de no tener en cuenta si el algoritmo se est√°
 ejecutando secuencialmente o conjuntamente con otros nodos. Veremos en
-la secciÛn siguiente estos detalles de implementaciÛn. 
+la secci√≥n siguiente estos detalles de implementaci√≥n. 
 
-\section{Detalles de implementaciÛn y experimentos}
+\section{Detalles de implementaci√≥n y experimentos}
 \label{sec:imp}
 
-Para hacer los experimentos se ha usado la librerÌa {\tt
-  Algorithm::Evolutionary::Simple}, un mÛdulo en Perl realizado por
-uno de los autores que permite crear un algoritmo genÈtico r·pidamente
-y en pocos pasos. La librerÌa en Perl est· optimizada para trabajar
-r·pidamente \cite{DBLP:conf/iwann/MereloRACML11} a pesar de tratarse
-de un lenguaje interpretado como el Perl; Perl, por otro lado, resulta
+Para hacer los experimentos se ha usado la librer√≠a {\tt
+  Algorithm::Evolutionary::Simple}, un m√≥dulo en Perl realizado por
+uno de los autores que permite crear un algoritmo gen√©tico r√°pidamente
+y en pocos pasos. La librer√≠a en Perl est√° optimizada para trabajar
+r√°pidamente \cite{DBLP:conf/iwann/MereloRACML11} a pesar de tratarse
+de un lenguaje interpretado como el Perl. Este lenguaje, por otro lado, resulta
 un lenguaje bastante adecuado para trabajar, en general, con
 algoritmos evolutivos teniendo una variedad de herramientas, algunas
 de las cuales han sido creadas por los autores de este trabajo
 \cite{perl-ea}.
 
 Para hacer los experimentos se ha buscado un problema que represente
-cierto reto para un algoritmo genÈtico y cuya evaluaciÛn tambiÈn
-requiera cierto tiempo, de forma que el algoritmo necesite un n˙mero
+cierto reto para un algoritmo gen√©tico y cuya evaluaci√≥n tambi√©n
+requiera cierto tiempo, de forma que el algoritmo necesite un n√∫mero
 de evaluaciones alto que pueda mejorarse a base de la
-paralelizaciÛn. Por eso la funciÛn elegida ha sido P-Peaks
-\cite{alba2002comparing}. En esta funciÛn se general aleatoriamente un conjunto
+paralelizaci√≥n. Por eso la funci√≥n elegida ha sido P-Peaks
+\cite{alba2002comparing}. En esta funci√≥n se general aleatoriamente un conjunto
 de $p$ cadenas binarias de longitud $b$. P-Peaks devuelve la distancia
-a la cadena {\em m·s cercana}, es decir, el mÌnimo de las distancias
-medida a todas las cadenas. La funciÛn resulta {\em pesada} porque hay
-que medir distancias a un n˙mero determinado de cadenas y resulta
-complicada para un algoritmo evolutivo al tener un n˙mero alto de
-m·ximos globales (correspondientes a cada una de las cadenas que se
-han generado). La implementaciÛn de esta funciÛn es tambiÈn libre,
-est· escrita en Perl y forma parte del mÛdulo {\tt
-  Algorithm::Evolutionary} denomin·ndose {\tt
+a la cadena {\em m√°s cercana}, es decir, el m√≠nimo de las distancias
+medida a todas las cadenas. La funci√≥n resulta {\em pesada} porque hay
+que medir distancias a un n√∫mero determinado de cadenas y resulta
+complicada para un algoritmo evolutivo al tener un n√∫mero alto de
+m√°ximos globales (correspondientes a cada una de las cadenas que se
+han generado). La implementaci√≥n de esta funci√≥n es tambi√©n libre,
+est√° escrita en Perl y forma parte del m√≥dulo {\tt
+  Algorithm::Evolutionary} denomin√°ndose {\tt
   Algorithm::Evolutionary::Fitness::P\_Peaks}. 
+% - pedro - pon una nota a pie indicando que est√° en el CPAN (para que lo bajen)
 
-Los par·metros base usados en el algoritmo evolutivo se muestran en la
-tabla \ref{tab:params}. En general, son los valores por omisiÛn de la
-librerÌa.  
+Los par√°metros base usados en el algoritmo evolutivo se muestran en la
+tabla \ref{tab:params}. En general, son los valores por omisi√≥n de la
+librer√≠a.  
 %
 \begin{table}[t!]
 \centering 
-\caption{Valores de los par·metros del algoritmo genÈtico y de la
-  funciÛn P-Peaks usada. \label{tab:params}}
+\caption{Valores de los par√°metros del algoritmo gen√©tico y de la
+  funci√≥n P-Peaks usada. \label{tab:params}}
 \begin{tabular}{lc}
 \hline
-Par·metro & Valor \\
+Par√°metro & Valor \\
 \hline \\
-SelecciÛn & Rueda de ruleta \\
-MutaciÛn & 1-bit \\
+Selecci√≥n & Rueda de ruleta \\
+Mutaci√≥n & 1-bit \\
 Entrecruzamiento & 2 puntos \\
-$P$ (n˙mero de picos)  & 256 \\
+$P$ (n√∫mero de picos)  & 256 \\
 $b$ (bits del cromosoma)   & 512 \\ 
-PoblaciÛn base & 1024 \\
+Poblaci√≥n base & 1024 \\
 \hline
 \end{tabular}
 \end{table}
 %
 Sin embargo, como se ha comentado, $P$ y $b$ han sido elegidos para
-hacer el trabajo suficientemente difÌcil como para que cada ejecuciÛn
-del algoritmo dure un tiempo considerable. Por otro lado, trat·ndose
-de un problema difÌcil, se ha escogido un tamaÒo grande de poblaciÛn
-para que el algoritmo sea capaz de encontrar la soluciÛn; con tamaÒos
-m·s pequeÒos de poblaciÛn (o subdivisiones del tamaÒo) se vio que en
+hacer el trabajo suficientemente dif√≠cil como para que cada ejecuci√≥n
+del algoritmo dure un tiempo considerable. Por otro lado, trat√°ndose
+de un problema dif√≠cil, se ha escogido un tama√±o grande de poblaci√≥n
+para que el algoritmo sea capaz de encontrar la soluci√≥n; con tama√±os
+m√°s peque√±os de poblaci√≥n (o subdivisiones del tama√±o) se vio que en
 muchos casos el algoritmo se quedaba estancado y era incapaz de
-encontrar la soluciÛn.
+encontrar la soluci√≥n.
 
-Para probar las prestaciones en paralelo del algoritmo se dividiÛ la
-poblaciÛn en dos y entre cuatro y se probÛ con un n˙mero igual de
-procesos. Los procesos se lanzaban desde un guiÛn de lÌnea de Ûrdenes
-de Linux de forma que eran m·s o menos simult·neos. HabÌa un proceso
+Para probar las prestaciones en paralelo del algoritmo se dividi√≥ la
+poblaci√≥n entre dos y entre cuatro y se prob√≥ con un n√∫mero igual de
+procesos. Los procesos se lanzaban desde un gui√≥n de l√≠nea de √≥rdenes  % - pedro -  "gui√≥n" ???
+de Linux de forma que eran m√°s o menos simult√°neos. Hab√≠a un proceso
 {\em principal} y otros {\em secundarios}; la principal diferencia es
 que este proceso {\em principal} decide cuando comienza y termina cada
-algoritmo y se usa tambiÈn para medir la duraciÛn de los mismos. Esto
-puede significar que, si la soluciÛn se encuentra por primera vez en
+algoritmo y se usa tambi√©n para medir la duraci√≥n de los mismos. Esto
+puede significar que, si la soluci√≥n se encuentra por primera vez en
 alguno de los procesos secundarios, el programa puede continuar
 durante un tiempo adicional; sin embargo, no suele demorarse mucho
 dado que se intercambian cromosomas entre unos procesos y otros. El
-hacerlo asÌ, adem·s, evita que hagan falta mecanismos adicionales de
-comunicaciÛn del final que tengan que propagarse y simplifica la
-programaciÛn que, en realidad, es exactamente la misma para el
-programa secuencial y el paralelo. El tiempo de ejecuciÛn se mide
-simplemente a travÈs de la diferencia en segundos entre el tiempo de
-creaciÛn de dos ficheros que se crear, precisamente, al comenzar y
+hacerlo as√≠, adem√°s, evita que hagan falta mecanismos adicionales de
+comunicaci√≥n del final que tengan que propagarse y simplifica la
+programaci√≥n que, en realidad, es exactamente la misma para el
+programa secuencial y el paralelo. El tiempo de ejecuci√≥n se mide
+simplemente a trav√©s de la diferencia en segundos entre el tiempo de
+creaci√≥n de dos ficheros que se crear, precisamente, al comenzar y
 terminar este programa. 
 
-Para la versiÛn paralela hace falta una {\em polÌtica de
-  migraciÛn}. En nuestro caso se ha elegido depositar un cromosoma
-aleatorio elegido entre el 50\% con m·s fitness y tomar, a la vez, uno
+Para la versi√≥n paralela hace falta una {\em pol√≠tica de
+  migraci√≥n}. En nuestro caso se ha elegido depositar un cromosoma      % - pedro -   "depositar" me suena raro, pero no se me ocurre otro verbo...
+aleatorio elegido entre el 50\% con m√°s fitness y tomar, a la vez, uno
 aleatorio del directorio en el que lo han depositado el resto. El
-elegir uno aleatorio entre los mejores coincide con la polÌtica que
-suele obtener mejores resultados en modelos isla, seg˙n hemos podido
+elegir uno aleatorio entre los mejores coincide con la pol√≠tica que
+suele obtener mejores resultados en modelos isla, seg√∫n hemos podido
 establecer en el pasado \cite{jj:2008:PPSN}. De hecho, algunas pruebas
-hecha depositando el mejor en cada generaciÛn ha dado peores
+hechas depositando el mejor en cada generaci√≥n ha dado peores
 resultados, provocando que en la mayor parte de los casos no termine
-el algoritmo. La estrategia aleatoria, aparte de r·pida (no necesita
-ordenar ni hacer ninguna otra operaciÛn) tiene la ventaja de la
-estrategia de depÛsito de chromosomas: no necesita tampoco llevar a
-cabo ning˙n cambio en el cÛdigo para el caso paralelo.
+el algoritmo. La estrategia aleatoria, aparte de r√°pida (no necesita
+ordenar ni hacer ninguna otra operaci√≥n) tiene la ventaja de la
+estrategia de dep√≥sito de chromosomas: no necesita tampoco llevar a
+cabo ning√∫n cambio en el c√≥digo para el caso paralelo.
 
-Tanto el cÛdigo como el resultado de los experimentos (que
-analizaremos en la siguiente secciÛn) est·n disponibles de forma
-abierta en la siguiente direcciÛn:
+Tanto el c√≥digo como el resultado de los experimentos (que
+analizaremos en la siguiente secci√≥n) est√°n disponibles de forma
+abierta en la siguiente direcci√≥n:
 \url{https://code.launchpad.net/\~jjmerelo/simplea/trunk}. El objetivo
-es que la comunidad cientÌfica se beneficie de esta ciencia abierta no
-sÛlo en los resultados, sino tambiÈn en los datos que podr·n ser, en
-caso de desearlo, analizados de forma indepenciente. 
+es que la comunidad cient√≠fica se beneficie de esta ciencia abierta no
+s√≥lo en los resultados, sino tambi√©n en los datos que podr√°n ser, en
+caso de desearlo, analizados de forma independiente. 
 
 \section{Resultados, conclusiones y trabajo futuro}
 \label{sec:res}
 
 Los experimentos se ejecutaron 10 veces. En todos los casos se
-encontrÛ la soluciÛn, salvo en el caso en el que se hizo con cuatro
-nodos, en el que acabÛ sÛlo en 6 ocasiones. En todo caso, los
+encontr√≥ la soluci√≥n, salvo en el caso en el que se hizo con cuatro
+nodos, en el que acab√≥ s√≥lo en 6 ocasiones. En todo caso, los
 resultados se muestran sobre los que efectivamente terminaron.
 
 El primer resultado es que efectivamente, a pesar de ejecutarse en un
-sÛlo ordenador y cargar la tabla de procesos del mismo, se consigue
-una mejora en la velocidad con el n˙mero de {\em nodos}. Esto se
+s√≥lo ordenador y cargar la tabla de procesos del mismo, se consigue
+una mejora en la velocidad con el n√∫mero de {\em nodos}. Esto se
 muestra en las Figuras \ref{fig:sm} y \ref{fig:toshiba}; en el primer
-caso los tiempos han sido tomados en un ordenador AMD con sÈxtuple
-n˙cleo ejecutando Ubuntu 12.04; en el segundo es un port·til Toshiba
-PortegÈ ejecutando el mismo sistema operativo y con un Intel i5 de
+caso los tiempos han sido tomados en un ordenador AMD con s√©xtuple
+n√∫cleo ejecutando Ubuntu 12.04; en el segundo es un port√°til Toshiba
+Porteg√© ejecutando el mismo sistema operativo y con un Intel i5 de
 procesador; en este caso el disco duro es un SSD lo que lo hace,
-teÛricamente, m·s r·pido que en el primer caso.
-%
+te√≥ricamente, m√°s r√°pido que en el primer caso.
+
+% - pedro -   no est√°n las im√°genes en el directorio (para compilar el paper)
+
 \begin{figure*}[!htb]
 \centering
 \includegraphics[scale=0.45]{tiempos.png}
 \caption{Boxplot del tiempo medio (en segundos) necesario para
   terminar el algoritmo usando un programa secuencial y dos y cuatro
-  procesos simult·neos.  Los tiempos han sido tomados en un ordenador
+  procesos simult√°neos.  Los tiempos han sido tomados en un ordenador
   de sobremesa. \label{fig:sm}}
 \end{figure*} 
 %
@@ -299,78 +323,83 @@ teÛricamente, m·s r·pido que en el primer caso.
 \includegraphics[scale=0.45]{tiempos-toshiba.png}
 \caption{Boxplot del tiempo medio (en segundos) necesario para
   terminar el algoritmo usando un programa secuencial y dos 
-  procesos simult·neos en un ordenador port·til.  \label{fig:toshiba}}
+  procesos simult√°neos en un ordenador port√°til.  \label{fig:toshiba}}
 \end{figure*} 
 %
 \begin{figure*}[!htb]
 \centering
 \includegraphics[scale=0.45]{evolucion-fitness.png}
-\caption{EvoluciÛn del fitness de una instancia de cada uno de los
-  tres experimentos; los cÌrculos indican el experimento con un solo
-  proceso, los tri·ngulos con dos y las cruces con 4 procesos. El
-  tiempo en el eje de abscisas es el tiempo real; el fitness m·ximo es
+\caption{Evoluci√≥n del fitness de una instancia de cada uno de los
+  tres experimentos; los c√≠rculos indican el experimento con un solo
+  proceso, los tri√°ngulos con dos y las cruces con 4 procesos. El
+  tiempo en el eje de abscisas es el tiempo real; el fitness m√°ximo es
   512.  \label{fig:fit}}
 \end{figure*} 
 
-Como se puede ver en ambas gr·ficas, el aÒadir nodos consigue rebajar
-el tiempo necesario para hallar la soluciÛn. De hecho, parte de esta
+Como se puede ver en ambas gr√°ficas, el a√±adir nodos consigue rebajar
+el tiempo necesario para hallar la soluci√≥n. De hecho, parte de esta
 mejora se debe al hecho de que se usen menos individuos en la
-poblaciÛn; pero una parte tambiÈn se debe a que se est·n evaluando
-simult·neamente m·s individuos. De hecho, la mejora para cuatro nodos
+poblaci√≥n; pero una parte tambi√©n se debe a que se est√°n evaluando
+simult√°neamente m√°s individuos. De hecho, la mejora para cuatro nodos
 es de un 70\% en la velocidad en el primer caso, mientras que la
 mejora para dos nodos es de un 40\% en el segundo caso, algo mejor en
 el primer caso. Esto, en parte, puede deberse al hecho de que
-realmente no nos preocupamos de cuando halla la soluciÛn cualquier
-nodo, sino sÛlo cuando la halla uno de ellos; pero en parte tambiÈn a
+realmente no nos preocupamos de cuando halla la soluci√≥n cualquier
+nodo, sino s√≥lo cuando la halla uno de ellos; pero en parte tambi√©n a
 que se nota la carga del sistema al ejecutar varios procesos
-simult·neamente, sea en la CPU sea en entrada salida.  De hecho, en el
+simult√°neamente, sea en la CPU sea en entrada salida.   % - pedro -   cambiar la redacci√≥n de esta frase (no entiendo a partir de la coma
+De hecho, en el
 primer caso las tres diferencias son significativas usando el test no
-paramÈtrico de Wilcoxon, mientras que en el segundo caso la diferencia
+param√©trico de Wilcoxon, mientras que en el segundo caso la diferencia
 no es significativa. Esto puede significar que la mayor velocidad del
 disco duro haga que la diferencia entre uno y otro sea menor al
-dedicar menos tiempo al escribir en disco; esto podrÌa indicar que uno
+dedicar menos tiempo al escribir en disco; esto podr√≠a indicar que uno
 de los factores que influyen en el tiempo es el tiempo empleado en
-leer del sistema de ficheros. Habr· que evaluar mediante un profiler
-este tipo de hipÛtesis para probar si es cierta o no, aunque una
-evaluaciÛn preliminar indica que el tiempo invertido en leer y
-escribir del disco duro es tres Ûrdenes de magnitud inferior al tiempo
+leer del sistema de ficheros. Habr√° que evaluar mediante un profiler  % - pedro -  comentar esto en los trabajos futuros
+este tipo de hip√≥tesis para probar si es cierta o no, aunque una
+evaluaci√≥n preliminar indica que el tiempo invertido en leer y
+escribir del disco duro es tres √≥rdenes de magnitud inferior al tiempo
 total del programa. 
 
 Por otro lado, en el primer caso se puede ver en la figura
-\ref{fig:fit} la evoluciÛn procede de forma bien diferente dependiendo
-del n˙mero de procesos. En este caso lo que se traza para cada n˙mero
-de procesos es el tiempo de creaciÛn del fichero co el individuo que
-se est· migrando tomado directamente del sistema de ficheros; el
-tiempo tiene resoluciÛn de segundos; esto es una ventaja adicional de
-usar este sistema, que te permite ver la evoluciÛn, con el tiempo, del
+\ref{fig:fit} la evoluci√≥n procede de forma bien diferente dependiendo
+del n√∫mero de procesos. En este caso lo que se traza para cada n√∫mero
+de procesos es el tiempo de creaci√≥n del fichero co el individuo que
+se est√° migrando tomado directamente del sistema de ficheros; el
+tiempo tiene resoluci√≥n de segundos; esto es una ventaja adicional de
+usar este sistema, que te permite ver la evoluci√≥n, con el tiempo, del
 fitness. Si recordamos que en realidad el que se graba es un individuo
 aleatorio entre los 50\% mejores, vemos que, en todo caso y para un
 tiempo determinado, por ejemplo 10 segundos, cuando hay 4 nodos se ha
-avanzado mucho m·s que cuando se usan dos o un solo nodo; esto prueba
+avanzado mucho m√°s que cuando se usan dos o un solo nodo; esto prueba
 que el algoritmo evolutivo se puede paralelizar usando este simple
-mecanismo que es, tambiÈn, extensible a sistemas qeu permitan
+mecanismo que es, tambi√©n, extensible a sistemas que permitan
 almacenamiento transparente en la nube como Dropbox, tal como
-querÌamos probar.
+quer√≠amos probar.
 
 Adicionalmente hemos hecho alguna prueba con directorios compartidos a
-travÈs de Dropbox y alojados en diferentes m·quinas virtuales dentro
-del mismo ordenador. Esto presenta una serie de retos, el principal
-que la velocidad de tales m·quinas virtuales va a ser muy diferente y
-continuando con el problema del retraso en la apariciÛn de los
-ficheros individuales en el resto de los nodos. Sin embargo, algunas
-pruebas iniciales (que se pueden ver en el repositorio de cÛdigo y
+trav√©s de Dropbox y alojados en diferentes m√°quinas virtuales dentro
+del mismo ordenador. 
+Esto presenta una serie de retos, el principal   % - pedro -   la segunda parte de esta frase no la entiendo
+que la velocidad de tales m√°quinas virtuales va a ser muy diferente y
+continuando con el problema del retraso en la aparici√≥n de los
+ficheros individuales en el resto de los nodos. 
+Sin embargo, algunas pruebas iniciales (que se pueden ver en el repositorio de c√≥digo y
 datos indicados) indican que, aunque se consiguen ciertas mejoras al
-aÒadir un nuevo nodo, no est· claro que sean significativas, por lo
+a√±adir un nuevo nodo, no est√° claro que sean significativas, por lo
 que hay que avanzar haciendo experimentos en este sentido, probando
-con diferentes configuraciones, m·quinas virtuales y parametrizaciÛn
+con diferentes configuraciones, m√°quinas virtuales y parametrizaci√≥n
 de las mismas. Esto es algo que se propone como trabajo futuro.
 
 
+% - pedro -  ¬øno hay secci√≥n de conclusiones y trabajos futuros como tal?
+
+
 \section{Agradecimientos}
-Este trabajo est· apoyado por los proyectos 
-TIN2011-28627-C04-02 del Ministerio espaÒol de Ciencia y
+Este trabajo est√° apoyado por los proyectos 
+TIN2011-28627-C04-02 del Ministerio espa√±ol de Ciencia y
 Competitividad y por el P08-TIC-03903 del gobierno regional andaluz,
-asÌ como el proyecto 83 (CANUBE) concedido por el CEI-BioTIC UGR
+as√≠ como el proyecto 83 (CANUBE) concedido por el CEI-BioTIC UGR
 (\url{http://biotic.ugr.es}). 
 
 \bibliographystyle{plain}
