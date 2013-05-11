@@ -2,16 +2,21 @@
 %%% mode: latex
 %%% TeX-master: t
 %%% End: 
-
-\documentclass{article}
+\documentclass{llncs}
 \usepackage[latin1]{inputenc}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{url}
 
+% he insertado los comentarios y correcciones de pedro y lo añado como autor
+
 \title{Experimentación con algoritmos distribuidos usando herramientas libres y gratuitas}
 
-\author{Juan Julián Merelo Guervós, Maribel García Arenas, Pedro Castillo Valdivieso y Antonio Mora García\\
+\author{Dr. Juan Julián Merelo Guervós, Dra. Maribel García Arenas, Pedro A. Castillo Valdivieso}
+\institute{Grupo GeNeura\\
+Departamento de Arquitectura y Tecnología de Computadores\\
+Universidad de Granada\\
+\email{(jmerelo,maribel,pedro)@geneura.ugr.es}
 }
 
 \begin{document}
@@ -20,7 +25,7 @@
 
 \begin{abstract}
 En un entorno de restricción de costes para grandes instalaciones
-computacionales acompañado de la existencia de herramientas en la nube
+computacionales, acompañado de la existencia de herramientas en la nube
 y ordenadores de sobremesa de altas capacidades, la experimentación
 con algoritmos distribuidos se puede hacer fácilmente combinando ambas
 cosas. En este trabajo se presenta una metodología de experimentación
@@ -36,7 +41,7 @@ las capacidades de estos nuevos algoritmos evolutivos distribuidos.
 \section{Introducción}
 
 La computación paralela no necesita ser complicada y prever escenarios
-complicados o grandes variaciones de estructura de los programas
+complejos o grandes variaciones de estructura de los programas
 secuenciales. La mayor parte de los ordenadores actuales pueden
 trabajar cómodamente con muchos procesos ejecutándose simultáneamente
 y poseen sistemas de almacenamiento rápido que pueden usarse para
@@ -49,6 +54,9 @@ tipo de procesador, del número de núcleos que posea y de la velocidad
 y eficiencia del sistema de ficheros) pero, sin embargo, la
 simplicidad en la programación es tal que puede compensar la menor
 ganancia en velocidad obtenida de esta forma. 
+% - pedro -
+Además, añadir nuevos nodos de computación al sistema paralelo distribuido 
+resultará extremadamente simple.
 
 Simultáneamente, está cada vez más vigente el uso de infraestructuras
 {\em nube} que permiten usar desde un ordenador conectado a la red
@@ -71,6 +79,22 @@ En este trabajo mostramos la primera aproximación al uso de
 infraestructuras virtuales para la creación de experimentos de
 computación distribuida de forma gratuita. Estos experimentos los
 aplicaremos a un tipo de algoritmo denominado algoritmo genético. 
+% - pedro - ¿no deberíamos referenciar los trabajos del dropbox anteriores?
+
+%AUTORES: M.G. Arenas, J.J. Merelo, A.M. Mora, P.A. Castillo, G. Romero, J.L.J. Laredo
+%TIÌTULO: Assessing speed-ups in commodity cloud storage services for distributed evolutionary algorithms TIPO DE PARTICIPACIOÌN: Oral
+%CONGRESO: 2011 IEEE Congress on Evolutionary Computation
+%PUBLICACIOÌN: isbn 978-1-4244-7833-0/11 pp.304-311. 2011
+
+%AUTORES: M. GarciÌa-Arenas, J.J. Merelo, Pedro A. Castillo, J.L.J. Laredo, G. Romero and Antonio Miguel Mora 
+%TIÌTULO: Using free cloud storage services for distributed evolutionary algorithms
+%CONGRESO: 13th Annual Genetic and Evolutionary Computation Conference, GECCO 2011
+%PUBLICACIOÌN: Proceedings, Dublin, Ireland, July 12-16, 2011. Natalio Krasnogor and Pier Luca Lanzi, Editors. ACM. pages 1603-1610. isbn 978-1-4503-0557-0. 2011
+
+%AUTORES: Maribel Garcia-Arenas, Pedro Castillo Valdivieso, Gustavo Romero Lopez and Juan Julian Merelo Guervos 
+%TIÌTULO: Cloud-based Evolutionary Parallel Computation using low cost storage services
+%PUBLICACIOÌN: IEEE First International Symposium on Network Cloud Computing and Applications. isbn: 978-0-7695-4550- 9/11. pp.56-61. 2011. DOI 10.1109/NCCA.2011.16. 2011
+
 
 Los algoritmos genéticos \cite{guervos2010informatica} son métodos de búsqueda y optimización
 inspirados en la selección natural propuesta por
@@ -96,7 +120,7 @@ problema que tratamos de resolver.
 
 Una vez establecidos estos dos componentes del algoritmo, un algoritmo
 evolutivo procede de la forma siguiente\begin{enumerate}
-\item Se general una población de cromosomas de tamaño $P$ y se evalúa
+\item Se genera una población de cromosomas de tamaño $P$ y se evalúa
 \item Mientras no se cumpla una condición de terminación (número de
   iteraciones, acercamiento a la solución o bien haber encontrado la
   solución, por ejemplo)\begin{enumerate}
@@ -114,17 +138,17 @@ evolutivo procede de la forma siguiente\begin{enumerate}
 
 Desde el punto de vista de este trabajo, lo interesante de los
 algoritmos evolutivos es que se prestan a una fácil paralelización:
-simplemente dividiendo la población en varias {\em islas} y creando
+simplemente dividiendo la población en varias {\em islas} y creando  % - pedro -  una cita aquí
 algún mecanismo de intercambio de individuos entre las islas.
 
 Esto es precisamente lo que vamos a hacer en este trabajo. Usaremos un
 algoritmo genético  que, dividido en varias {\em islas}, intercambiará
 información a través de un directorio compartido. Ese directorio
 compartido puede estar en un servicio tal como Dropbox, pero en este
-caso no haremos experimentos relacionados con esto. Trabajaremos
-además usando un sistema de fuentes abiertas en el que tanto el código
+caso no haremos experimentos relacionados con esto.   % - pedro - esta frase me resulta ¿como contradictoria? da la impresión de que va a ser que sí, pero tras la coma, resulta ser que no!
+Trabajaremos además usando un sistema de fuentes abiertas en el que tanto el código
 como la experimentación como este mismo trabajo están a disposición
-de la comunidad científica desde el momento de su creación. 
+de la comunidad científica desde el momento de su creación.  % - pedro -  decir dónde estarán para bajarlo
 
 Con este trabajo tratamos de demostrar que, usando un mecanismo de
 intercambio a través de almacenamiento, se pueden conseguir mejoras de velocidad incluso en un
@@ -143,7 +167,7 @@ de trabajo futuro en la Sección \ref{sec:res}.
 \section{Estado del arte}
 
 Los principales resultados en este área son de los mismos autores
-\cite{DBLP:conf/cec/ArenasGMCRL11,DBLP:conf/gecco/ArenasGCLRM11,mericloud}. En
+\cite{DBLP:conf/cec/ArenasGMCRL11,DBLP:conf/gecco/ArenasGCLRM11,mericloud}. En   % - pedro -  aquí sí se citan los trabajos propios anteriores
 estos trabajos se usó un algoritmo evolutivo implementado en Java para
 probar diferentes sistemas gratuitos de almacenamiento en nube tales
 como Dropbox u otros. Como principal resultado se obtuvo el hecho de
@@ -156,7 +180,7 @@ en la propagación, la migración introducía también un retraso en la
 ejecución del algoritm para que esta fuera capaz de propagarse. 
 
 En este trabajo principalmente tratamos de reproducir los resultados
-obtenidos en el mismo con otro tipo de implementación y, además,
+obtenidos en el mismo con otro tipo de implementación y, además,  % - pedro -  indicar qué tipo de implementación
 usando otra implemenatción diferente que tiene como principal
 diferencia el hecho de no tener en cuenta si el algoritmo se está
 ejecutando secuencialmente o conjuntamente con otros nodos. Veremos en
@@ -170,7 +194,7 @@ Para hacer los experimentos se ha usado la librería {\tt
 uno de los autores que permite crear un algoritmo genético rápidamente
 y en pocos pasos. La librería en Perl está optimizada para trabajar
 rápidamente \cite{DBLP:conf/iwann/MereloRACML11} a pesar de tratarse
-de un lenguaje interpretado como el Perl; Perl, por otro lado, resulta
+de un lenguaje interpretado como el Perl. Este lenguaje, por otro lado, resulta
 un lenguaje bastante adecuado para trabajar, en general, con
 algoritmos evolutivos teniendo una variedad de herramientas, algunas
 de las cuales han sido creadas por los autores de este trabajo
@@ -192,6 +216,7 @@ han generado). La implementación de esta función es también libre,
 está escrita en Perl y forma parte del módulo {\tt
   Algorithm::Evolutionary} denominándose {\tt
   Algorithm::Evolutionary::Fitness::P\_Peaks}. 
+% - pedro - pon una nota a pie indicando que está en el CPAN (para que lo bajen)
 
 Los parámetros base usados en el algoritmo evolutivo se muestran en la
 tabla \ref{tab:params}. En general, son los valores por omisión de la
@@ -225,8 +250,8 @@ muchos casos el algoritmo se quedaba estancado y era incapaz de
 encontrar la solución.
 
 Para probar las prestaciones en paralelo del algoritmo se dividió la
-población en dos y entre cuatro y se probó con un número igual de
-procesos. Los procesos se lanzaban desde un guión de línea de órdenes
+población entre dos y entre cuatro y se probó con un número igual de
+procesos. Los procesos se lanzaban desde un guión de línea de órdenes  % - pedro -  "guión" ???
 de Linux de forma que eran más o menos simultáneos. Había un proceso
 {\em principal} y otros {\em secundarios}; la principal diferencia es
 que este proceso {\em principal} decide cuando comienza y termina cada
@@ -244,13 +269,13 @@ creación de dos ficheros que se crear, precisamente, al comenzar y
 terminar este programa. 
 
 Para la versión paralela hace falta una {\em política de
-  migración}. En nuestro caso se ha elegido depositar un cromosoma
+  migración}. En nuestro caso se ha elegido depositar un cromosoma      % - pedro -   "depositar" me suena raro, pero no se me ocurre otro verbo...
 aleatorio elegido entre el 50\% con más fitness y tomar, a la vez, uno
 aleatorio del directorio en el que lo han depositado el resto. El
 elegir uno aleatorio entre los mejores coincide con la política que
 suele obtener mejores resultados en modelos isla, según hemos podido
 establecer en el pasado \cite{jj:2008:PPSN}. De hecho, algunas pruebas
-hecha depositando el mejor en cada generación ha dado peores
+hechas depositando el mejor en cada generación ha dado peores
 resultados, provocando que en la mayor parte de los casos no termine
 el algoritmo. La estrategia aleatoria, aparte de rápida (no necesita
 ordenar ni hacer ninguna otra operación) tiene la ventaja de la
@@ -263,7 +288,7 @@ abierta en la siguiente dirección:
 \url{https://code.launchpad.net/\~jjmerelo/simplea/trunk}. El objetivo
 es que la comunidad científica se beneficie de esta ciencia abierta no
 sólo en los resultados, sino también en los datos que podrán ser, en
-caso de desearlo, analizados de forma indepenciente. 
+caso de desearlo, analizados de forma independiente. 
 
 \section{Resultados, conclusiones y trabajo futuro}
 \label{sec:res}
@@ -282,7 +307,9 @@ núcleo ejecutando Ubuntu 12.04; en el segundo es un portátil Toshiba
 Portegé ejecutando el mismo sistema operativo y con un Intel i5 de
 procesador; en este caso el disco duro es un SSD lo que lo hace,
 teóricamente, más rápido que en el primer caso.
-%
+
+% - pedro -   no están las imágenes en el directorio (para compilar el paper)
+
 \begin{figure*}[!htb]
 \centering
 \includegraphics[scale=0.45]{tiempos.png}
@@ -321,14 +348,15 @@ el primer caso. Esto, en parte, puede deberse al hecho de que
 realmente no nos preocupamos de cuando halla la solución cualquier
 nodo, sino sólo cuando la halla uno de ellos; pero en parte también a
 que se nota la carga del sistema al ejecutar varios procesos
-simultáneamente, sea en la CPU sea en entrada salida.  De hecho, en el
+simultáneamente, sea en la CPU sea en entrada salida.   % - pedro -   cambiar la redacción de esta frase (no entiendo a partir de la coma
+De hecho, en el
 primer caso las tres diferencias son significativas usando el test no
 paramétrico de Wilcoxon, mientras que en el segundo caso la diferencia
 no es significativa. Esto puede significar que la mayor velocidad del
 disco duro haga que la diferencia entre uno y otro sea menor al
 dedicar menos tiempo al escribir en disco; esto podría indicar que uno
 de los factores que influyen en el tiempo es el tiempo empleado en
-leer del sistema de ficheros. Habrá que evaluar mediante un profiler
+leer del sistema de ficheros. Habrá que evaluar mediante un profiler  % - pedro -  comentar esto en los trabajos futuros
 este tipo de hipótesis para probar si es cierta o no, aunque una
 evaluación preliminar indica que el tiempo invertido en leer y
 escribir del disco duro es tres órdenes de magnitud inferior al tiempo
@@ -346,22 +374,27 @@ aleatorio entre los 50\% mejores, vemos que, en todo caso y para un
 tiempo determinado, por ejemplo 10 segundos, cuando hay 4 nodos se ha
 avanzado mucho más que cuando se usan dos o un solo nodo; esto prueba
 que el algoritmo evolutivo se puede paralelizar usando este simple
-mecanismo que es, también, extensible a sistemas qeu permitan
+mecanismo que es, también, extensible a sistemas que permitan
 almacenamiento transparente en la nube como Dropbox, tal como
 queríamos probar.
 
 Adicionalmente hemos hecho alguna prueba con directorios compartidos a
 través de Dropbox y alojados en diferentes máquinas virtuales dentro
-del mismo ordenador. Esto presenta una serie de retos, el principal
+del mismo ordenador. 
+Esto presenta una serie de retos, el principal   % - pedro -   la segunda parte de esta frase no la entiendo
 que la velocidad de tales máquinas virtuales va a ser muy diferente y
 continuando con el problema del retraso en la aparición de los
-ficheros individuales en el resto de los nodos. Sin embargo, algunas
-pruebas iniciales (que se pueden ver en el repositorio de código y
+ficheros individuales en el resto de los nodos. 
+Sin embargo, algunas pruebas iniciales (que se pueden ver en el repositorio de código y
 datos indicados) indican que, aunque se consiguen ciertas mejoras al
 añadir un nuevo nodo, no está claro que sean significativas, por lo
 que hay que avanzar haciendo experimentos en este sentido, probando
 con diferentes configuraciones, máquinas virtuales y parametrización
 de las mismas. Esto es algo que se propone como trabajo futuro.
+
+\section{Conclusiones y trabajo futuro}
+
+% - pedro -  ¿no hay sección de conclusiones y trabajos futuros como tal?
 
 
 \section{Agradecimientos}
