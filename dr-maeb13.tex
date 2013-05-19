@@ -1,23 +1,32 @@
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: t
-%%% End: 
-\documentclass{llncs}
-\usepackage[latin1]{inputenc}
-\usepackage{graphicx}
+\documentclass[runningheads]{llncs}
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx,epsfig}
+\usepackage{rotating}
+\usepackage{subfig}
+\usepackage{listings}
+%%%%
+
 \usepackage{color}
+\usepackage{alltt}
+\usepackage{verbatim}
+\usepackage{url}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish,es-noshorthands]{babel}
+
+%%
+
 \usepackage{url}
 
-% he insertado los comentarios y correcciones de pedro y lo añado como autor
+%\urldef{\mailsa}\path|pgarcia@atc.ugr.es|
 
 \title{Experimentación con algoritmos distribuidos usando herramientas libres y gratuitas}
 
-\author{Dr. Juan Julián Merelo Guervós, Dra. Maribel García Arenas, Pedro A. Castillo Valdivieso}
-\institute{Grupo GeNeura\\
-Departamento de Arquitectura y Tecnología de Computadores\\
-Universidad de Granada\\
-\email{(jmerelo,maribel,pedro)@geneura.ugr.es}
-}
+% \author{Dr. Juan Julián Merelo Guervós, Dra. Maribel García Arenas,
+% Pedro A. Castillo Valdivieso} \institute{Grupo GeNeura\\ Departamento
+% de Arquitectura y Tecnología de Computadores\\ Universidad de
+% Granada\\ \email{(jmerelo,maribel,pedro)@geneura.ugr.es} }
+\author{Diversos Autores}
 
 \begin{document}
 
@@ -41,7 +50,7 @@ las capacidades de estos nuevos algoritmos evolutivos distribuidos.
 \section{Introducción}
 
 La computación paralela no necesita ser complicada y prever escenarios
-complejos o grandes variaciones de estructura de los programas
+complejos o grandes variaciones de estructura en los programas
 secuenciales. La mayor parte de los ordenadores actuales pueden
 trabajar cómodamente con muchos procesos ejecutándose simultáneamente
 y poseen sistemas de almacenamiento rápido que pueden usarse para
@@ -56,14 +65,14 @@ simplicidad en la programación es tal que puede compensar la menor
 ganancia en velocidad obtenida de esta forma. 
 % - pedro -
 Además, añadir nuevos nodos de computación al sistema paralelo distribuido 
-resultará extremadamente simple.
+resultará tan simple como ejecutar tantos procesos simultáneos como la CPU sea capaz de soportar. 
 
 Simultáneamente, está cada vez más vigente el uso de infraestructuras
 {\em nube} que permiten usar desde un ordenador conectado a la red
 diferentes recursos tales como CPUs virtuales o discos duros
 virtuales. El hecho de que sean {\em virtuales} implica que aparezcan,
 desde el punto de vista del interfaz de programación, como si se
-tratara de otras infraestructuras disponibles desde el sistema
+tratara de recursos disponibles desde el sistema
 operativo. En la práctica, podemos usar un disco duro remoto situado
 en la nube como si se tratara de un disco duro local. De esta forma,
 también simple y transparente al programador podemos paralelizar un
@@ -100,8 +109,9 @@ Los algoritmos genéticos \cite{guervos2010informatica} son métodos de búsqueda y
 inspirados en la selección natural propuesta por
 Darwin. Un algoritmo evolutivo codifica un problema en unas
 estructuras de datos generalmente denominadas {\em cromosomas} y que
-son una representación informática de los parámetros necesarios para
-resolverlo; por ejemplo, resolver el recorrido del viajante implicaría
+son una representaci\'on inform\'atica de los par\'ametros necesarios para
+resolverlo; por ejemplo, resolver el recorrido del llamado viajante de comercio (Travel Salesman Problem
+\cite{DBLP:conf/iwann/MoraMCAGLR11} implicar\'ia
 codificar en un {\em cromosoma} la lista de las ciudades a visitar; un
 problema que tuviera varios números reales como parámetros usaría una
 representación binaria con una precisión determinada de tales
@@ -137,9 +147,10 @@ evolutivo procede de la forma siguiente\begin{enumerate}
 \end{enumerate}
 
 Desde el punto de vista de este trabajo, lo interesante de los
-algoritmos evolutivos es que se prestan a una fácil paralelización:
-simplemente dividiendo la población en varias {\em islas} y creando  % - pedro -  una cita aquí
-algún mecanismo de intercambio de individuos entre las islas.
+algoritmos evolutivos es que se prestan a una f\'acil paralelizaci\'on:
+simplemente dividiendo la poblaci\'on en grupos denominados {\em islas}\cite{DBLP:conf/3pgcic/GuervosMFEL12} y creando  
+% -pedro-una cita aqu\'i
+alg\'un mecanismo de intercambio de individuos entre ellas.
 
 Esto es precisamente lo que vamos a hacer en este trabajo. Usaremos un
 algoritmo genético  que, dividido en varias {\em islas}, intercambiará
@@ -196,9 +207,7 @@ y en pocos pasos. La librería en Perl está optimizada para trabajar
 rápidamente \cite{DBLP:conf/iwann/MereloRACML11} a pesar de tratarse
 de un lenguaje interpretado como el Perl. Este lenguaje, por otro lado, resulta
 un lenguaje bastante adecuado para trabajar, en general, con
-algoritmos evolutivos teniendo una variedad de herramientas, algunas
-de las cuales han sido creadas por los autores de este trabajo
-\cite{perl-ea}.
+algoritmos evolutivos teniendo una variedad de herramientas ya desarrolladas \cite{perl-ea}.
 
 Para hacer los experimentos se ha buscado un problema que represente
 cierto reto para un algoritmo genético y cuya evaluación también
@@ -252,7 +261,8 @@ encontrar la solución.
 Para probar las prestaciones en paralelo del algoritmo se dividió la
 población entre dos y entre cuatro y se probó con un número igual de
 procesos. Los procesos se lanzaban desde un guión de línea de órdenes  % - pedro -  "guión" ???
-de Linux de forma que eran más o menos simultáneos. Había un proceso
+% un script - JJ
+de Linux de forma que el inicio de los procesos es simultáneo (salvo tiempo de inicio de un proceso, que es muy bajo en todo caso). Había un proceso
 {\em principal} y otros {\em secundarios}; la principal diferencia es
 que este proceso {\em principal} decide cuando comienza y termina cada
 algoritmo y se usa también para medir la duración de los mismos. Esto
@@ -396,13 +406,28 @@ de las mismas. Esto es algo que se propone como trabajo futuro.
 
 % - pedro -  ¿no hay sección de conclusiones y trabajos futuros como tal?
 
+% - pedro -  ¿no hay secci\'on de conclusiones y trabajos futuros como tal?
+Este trabajo ha sido el comienzo de una l\'inea de investigaci\'on en la que se pretenden montar m\'aquinas paralelas con la
+infraestructura de la que se dispone en cualquier despacho o laboratorio. Utiliz\'ando un multiprocesador (varias m\'aquinas
+con espacio de direcciones distribuido unidas por una red de interconexi\'on) y un espacio de almacenamiento en disco al que todos
+los procesadores pueden acceder, se ha reproducido el sistema de comunicaci\'on de un multiprocesador con espacio de direcciones
+compartido, probando que efectivamente la arquitectura es posible y es posible ejecutar un algoritmo evolutivo utilizando esta
+infraestructura, contando s\'olo con los recursos disponibles y un esquema de programaci\'on SPMD.
+
+Los tiempos empleados en la comunicaci\'on van retardados por la necesidad de escribir en disco para que los procesos se
+comuniquen, y esa ser\'a nuestro siguiente objetivo, intentar simplificar al m\'aximo la programaci\'on intentando evitar al
+m\'aximo este tipo de operaciones, acercando m\'as la arquitectura propuesta a una m\'as eficiente.
+
+Aunque los resultados obtenidos no son sorprendentes, nuestro objetivo no es superar la velocidad de las m\'aquinas dise\~nadas
+para computaci\'on paralela, sino simplemente probar que existe la posibilidad de ejecutar en paralelo con los recursos m\'inimos
+una aplicaci\'on cualquiera.
 
 \section{Agradecimientos}
-Este trabajo está apoyado por los proyectos 
-TIN2011-28627-C04-02 del Ministerio español de Ciencia y
-Competitividad y por el P08-TIC-03903 del gobierno regional andaluz,
-así como el proyecto 83 (CANUBE) concedido por el CEI-BioTIC UGR
-(\url{http://biotic.ugr.es}). 
+%Este trabajo est\'a apoyado por los proyectos 
+%TIN2011-28627-C04-02 del Ministerio espa\~nol de Ciencia y
+%Competitividad y por el P08-TIC-03903 del gobierno regional andaluz,
+%as\'i como el proyecto 83 (CANUBE) concedido por el CEI-BioTIC UGR
+%(\url{http://biotic.ugr.es}). 
 
 \bibliographystyle{plain}
 \bibliography{dr,geneura}
