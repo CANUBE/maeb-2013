@@ -80,14 +80,14 @@ algoritmo, simplemente usando una infraestructura de almacenamiento
 virtual. A la vez, en algunos casos estas infraestructuras son
 gratuitas, bien por el hecho de que formen parte de la misma
 organización (discos conectados a la red, NAS o bien infraestructuras
-creadas con OpenStack u OpenNebula) o bien porque se trate de
+creadas con OpenStack u OpenNebula \cite{magaz2012opennebula}) o bien porque se trate de
 productos comerciales que poseen una versión gratuita, como se trata
 de Dropbox, Ubuntu One u otros. 
 
 En este trabajo mostramos la primera aproximación al uso de
 infraestructuras virtuales para la creación de experimentos de
 computación distribuida de forma gratuita. Estos experimentos los
-aplicaremos a un tipo de algoritmo denominado algoritmo genético. 
+aplicaremos a un tipo de algoritmo denominado algoritmo genético. a un algoritmo genético canónico. 
 % - pedro - ¿no deberíamos referenciar los trabajos del dropbox anteriores?
 
 %AUTORES: M.G. Arenas, J.J. Merelo, A.M. Mora, P.A. Castillo, G. Romero, J.L.J. Laredo
@@ -104,62 +104,39 @@ aplicaremos a un tipo de algoritmo denominado algoritmo genético.
 %TIÌTULO: Cloud-based Evolutionary Parallel Computation using low cost storage services
 %PUBLICACIOÌN: IEEE First International Symposium on Network Cloud Computing and Applications. isbn: 978-0-7695-4550- 9/11. pp.56-61. 2011. DOI 10.1109/NCCA.2011.16. 2011
 
-
-Los algoritmos genéticos \cite{guervos2010informatica} son métodos de búsqueda y optimización
-inspirados en la selección natural propuesta por
-Darwin. Un algoritmo evolutivo codifica un problema en unas
-estructuras de datos generalmente denominadas {\em cromosomas} y que
-son una representaci\'on inform\'atica de los par\'ametros necesarios para
-resolverlo; por ejemplo, resolver el recorrido del llamado viajante de comercio (Travel Salesman Problem
-\cite{DBLP:conf/iwann/MoraMCAGLR11} implicar\'ia
-codificar en un {\em cromosoma} la lista de las ciudades a visitar; un
-problema que tuviera varios números reales como parámetros usaría una
-representación binaria con una precisión determinada de tales
-parámetros, esta representación binaria es la que se usa en muchos
-problemas numéricos y será la que usemos aquí por simple
-conveniencia. 
-
-Un algoritmo genético necesita una función de adecuación o {\em
-  fitness} que nos permita evaluar lo que se acerca cada {\em
-  cromosoma} a la solución. Esta función permite comparar diferentes
-cromosomas y en principio y para simplificar, podemos pensar que es un
-solo número real, aunque puede ser un vector o incluso tratarse de una
-evaluación por parte de un usuario. La cuestión es que esta función
-nos debe permitir evaluar qué cromosoma codifica una mejor solución al
-problema que tratamos de resolver.
-
-Una vez establecidos estos dos componentes del algoritmo, un algoritmo
-evolutivo procede de la forma siguiente\begin{enumerate}
-\item Se genera una población de cromosomas de tamaño $P$ y se evalúa
-\item Mientras no se cumpla una condición de terminación (número de
-  iteraciones, acercamiento a la solución o bien haber encontrado la
-  solución, por ejemplo)\begin{enumerate}
-  \item Escoger (de diferentes formas posibles) qué miembros de la
-    población van a reproducirse, es decir, ser transformados para
-    pasar a la siguiente iteración (denominada habitualmente {\em
-      generación}, por el símil con la evolución natural.
-  \item Cambiar una parte del cromosoma ({\em mutar}) o combinar dos
-    soluciones ({\em entrecruzamiento}) para dar una nueva generación
-    de cromosomas.
-  \item Evaluar los nuevos individuos. Insertar esta nueva población
-    en la población antigua, eliminando (en general) los peores. 
-  \end{enumerate}
-\end{enumerate}
-
+%Sí se han referenciado por algún sitio - JJ
 Desde el punto de vista de este trabajo, lo interesante de los
 algoritmos evolutivos es que se prestan a una f\'acil paralelizaci\'on:
-simplemente dividiendo la poblaci\'on en grupos denominados {\em islas}\cite{DBLP:conf/3pgcic/GuervosMFEL12} y creando  
+simplemente dividiendo la poblaci\'on en grupos denominados {\em
+  islas} \cite{DBLP:conf/3pgcic/GuervosMFEL12} y creando   
 % -pedro-una cita aqu\'i
-alg\'un mecanismo de intercambio de individuos entre ellas.
+alg\'un mecanismo de intercambio de individuos entre ellas se pueden
+paralelizar. A este mecanismo se le suele denominar {\em migración} y
+puede hacerse de diferentes maneras: síncrona o asíncronamente y
+usando diferentes topologías, es decir, conexiones entre las islas. No
+es el objetivo de este trabajo revisar estos aspectos y su influencia
+sobre el resultado de la ejecución del algoritmo; simplemente
+adoptaremos el método que suponga un cambio menor sobre el código de
+un algoritmo genético secuencial clásico. 
 
 Esto es precisamente lo que vamos a hacer en este trabajo. Usaremos un
-algoritmo genético  que, dividido en varias {\em islas}, intercambiará
+algoritmo genético  que, dividiendo su población en varias {\em islas}, intercambiará
 información a través de un directorio compartido. Ese directorio
-compartido puede estar en un servicio tal como Dropbox, pero en este
-caso no haremos experimentos relacionados con esto.   % - pedro - esta frase me resulta ¿como contradictoria? da la impresión de que va a ser que sí, pero tras la coma, resulta ser que no!
+compartido podría sincronizado estar en un servicio tal como Dropbox, pero en este
+caso no haremos experimentos relacionados con esto, sino que nuestro
+objetivo es establecer el comportamiento de un algoritmo base con
+todos los procesos ejecutándose en el mismo ordenador.   % - pedro -
+                                % esta frase me resulta ¿como
+                                % contradictoria? da la impresión de
+                                % que va a ser que sí, pero tras la
+                                % coma, resulta ser que no! 
+% En realidad, el código sería el mismo, pero los resultados son
+% diferentes. 
 Trabajaremos además usando un sistema de fuentes abiertas en el que tanto el código
 como la experimentación como este mismo trabajo están a disposición
-de la comunidad científica desde el momento de su creación.  % - pedro -  decir dónde estarán para bajarlo
+de la comunidad científica desde el momento de su creación.  % - pedro
+                                % -  decir dónde estarán para bajarlo
+Todos ellos se pueden descargar de \url{un.url.anoni.mo}. 
 
 Con este trabajo tratamos de demostrar que, usando un mecanismo de
 intercambio a través de almacenamiento, se pueden conseguir mejoras de velocidad incluso en un
@@ -177,37 +154,47 @@ de trabajo futuro en la Sección \ref{sec:res}.
 
 \section{Estado del arte}
 
-Los principales resultados en este área son de los mismos autores
+Los principales resultados en este área % son de los mismos autores
+han sido publicados recientemente 
 \cite{DBLP:conf/cec/ArenasGMCRL11,DBLP:conf/gecco/ArenasGCLRM11,mericloud}. En   % - pedro -  aquí sí se citan los trabajos propios anteriores
-estos trabajos se usó un algoritmo evolutivo implementado en Java para
+estos trabajos los autores usaron un algoritmo evolutivo implementado en Java para
 probar diferentes sistemas gratuitos de almacenamiento en nube tales
 como Dropbox u otros. Como principal resultado se obtuvo el hecho de
 que se conseguían escalados interesantes, pero sólo con unas pocas
-máquinas. Además, el retraso en la propagación de los resultados de
+máquinas; el sistema se saturaba a partir de un número determinado de
+nodos. Además, el retraso en la propagación de los resultados de 
 unas máquinas a otras implicaba que el problema de optimización debía
 de ser de cierto tamaño para que los resultados fueran
 significativos. El principal problema era que, debido a este retraso
 en la propagación, la migración introducía también un retraso en la
-ejecución del algoritm para que esta fuera capaz de propagarse. 
+ejecución del algoritmo para que esta fuera capaz de propagarse. 
 
 En este trabajo principalmente tratamos de reproducir los resultados
-obtenidos en el mismo con otro tipo de implementación y, además,  % - pedro -  indicar qué tipo de implementación
-usando otra implemenatción diferente que tiene como principal
+obtenidos en el mismo con otro tipo de implementación usando un
+lenguaje de programación diferente y sin introducir retrasos cuando se
+hace migración y, además,  % - pedro -  indicar qué tipo de implementación
+usando otra implementación diferente que tiene como principal
 diferencia el hecho de no tener en cuenta si el algoritmo se está
 ejecutando secuencialmente o conjuntamente con otros nodos. Veremos en
 la sección siguiente estos detalles de implementación. 
 
-\section{Detalles de implementación y experimentos}
+\section{Detalles de implementación del algoritmo evolutivo y experimentos}
 \label{sec:imp}
 
 Para hacer los experimentos se ha usado la librería {\tt
-  Algorithm::Evolutionary::Simple}, un módulo en Perl realizado por
-uno de los autores que permite crear un algoritmo genético rápidamente
-y en pocos pasos. La librería en Perl está optimizada para trabajar
-rápidamente \cite{DBLP:conf/iwann/MereloRACML11} a pesar de tratarse
+  Algorithm::Evolutionary::Simple}, un módulo en Perl % realizado por
+% uno de los autores 
+que permite crear un algoritmo genético rápidamente
+y en pocos pasos. Este módulo está optimizado para alcanzar
+velocidades aceptables \cite{DBLP:conf/iwann/MereloRACML11} a pesar de tratarse
 de un lenguaje interpretado como el Perl. Este lenguaje, por otro lado, resulta
 un lenguaje bastante adecuado para trabajar, en general, con
-algoritmos evolutivos teniendo una variedad de herramientas ya desarrolladas \cite{perl-ea}.
+algoritmos evolutivos teniendo una variedad de herramientas ya
+desarrolladas \cite{perl-ea} y resultando fácil la implementación de
+nuevas funciones, estructuras de datos u operadores. El hecho de
+trabajar con un diferente lenguaje, en todo caso, alterará las
+prestaciones de base, pero no tendría que tener tanta influencia sobre
+el escalado. 
 
 Para hacer los experimentos se ha buscado un problema que represente
 cierto reto para un algoritmo genético y cuya evaluación también
@@ -224,12 +211,15 @@ máximos globales (correspondientes a cada una de las cadenas que se
 han generado). La implementación de esta función es también libre,
 está escrita en Perl y forma parte del módulo {\tt
   Algorithm::Evolutionary} denominándose {\tt
-  Algorithm::Evolutionary::Fitness::P\_Peaks}. 
+  Algorithm::Evolutionary::Fitness::P\_Peaks}; este módulo es estándar
+y está incluido en la librería {\tt Algorithm::Evolutionary}
+mencionada anteriormente:
+\url{http://search.cpan.org/~jmerelo/Algorithm-Evolutionary-0.78/lib/Algorithm/Evolutionary/Fitness/P_Peaks.pm}
 % - pedro - pon una nota a pie indicando que está en el CPAN (para que lo bajen)
 
 Los parámetros base usados en el algoritmo evolutivo se muestran en la
 tabla \ref{tab:params}. En general, son los valores por omisión de la
-librería.  
+librería.
 %
 \begin{table}[t!]
 \centering 
@@ -260,7 +250,7 @@ encontrar la solución.
 
 Para probar las prestaciones en paralelo del algoritmo se dividió la
 población entre dos y entre cuatro y se probó con un número igual de
-procesos. Los procesos se lanzaban desde un guión de línea de órdenes  % - pedro -  "guión" ???
+procesos. Los procesos se lanzaban desde un programa de línea de órdenes  % - pedro -  "guión" ???
 % un script - JJ
 de Linux de forma que el inicio de los procesos es simultáneo (salvo tiempo de inicio de un proceso, que es muy bajo en todo caso). Había un proceso
 {\em principal} y otros {\em secundarios}; la principal diferencia es
@@ -279,7 +269,10 @@ creación de dos ficheros que se crear, precisamente, al comenzar y
 terminar este programa. 
 
 Para la versión paralela hace falta una {\em política de
-  migración}. En nuestro caso se ha elegido depositar un cromosoma      % - pedro -   "depositar" me suena raro, pero no se me ocurre otro verbo...
+  migración}. En nuestro caso se ha elegido guardar un cromosoma
+% - pedro -   "depositar" me suena raro, pero no se me ocurre otro
+% verbo...
+%guardar - JJ
 aleatorio elegido entre el 50\% con más fitness y tomar, a la vez, uno
 aleatorio del directorio en el que lo han depositado el resto. El
 elegir uno aleatorio entre los mejores coincide con la política que
@@ -289,7 +282,7 @@ hechas depositando el mejor en cada generación ha dado peores
 resultados, provocando que en la mayor parte de los casos no termine
 el algoritmo. La estrategia aleatoria, aparte de rápida (no necesita
 ordenar ni hacer ninguna otra operación) tiene la ventaja de la
-estrategia de depósito de chromosomas: no necesita tampoco llevar a
+estrategia de depósito de cromosomas: no necesita tampoco llevar a
 cabo ningún cambio en el código para el caso paralelo.
 
 Tanto el código como el resultado de los experimentos (que
@@ -358,7 +351,10 @@ el primer caso. Esto, en parte, puede deberse al hecho de que
 realmente no nos preocupamos de cuando halla la solución cualquier
 nodo, sino sólo cuando la halla uno de ellos; pero en parte también a
 que se nota la carga del sistema al ejecutar varios procesos
-simultáneamente, sea en la CPU sea en entrada salida.   % - pedro -   cambiar la redacción de esta frase (no entiendo a partir de la coma
+simultáneamente, resultando excesiva tanto para la CPU como para la
+entrada/salida.   % - pedro -   cambiar la redacción de esta frase (no
+                  % entiendo a partir de la coma
+% ¿ahora mejor? - JJ
 De hecho, en el
 primer caso las tres diferencias son significativas usando el test no
 paramétrico de Wilcoxon, mientras que en el segundo caso la diferencia
@@ -375,7 +371,7 @@ total del programa.
 Por otro lado, en el primer caso se puede ver en la figura
 \ref{fig:fit} la evolución procede de forma bien diferente dependiendo
 del número de procesos. En este caso lo que se traza para cada número
-de procesos es el tiempo de creación del fichero co el individuo que
+de procesos es el tiempo de creación del fichero con el individuo que
 se está migrando tomado directamente del sistema de ficheros; el
 tiempo tiene resolución de segundos; esto es una ventaja adicional de
 usar este sistema, que te permite ver la evolución, con el tiempo, del
@@ -402,8 +398,6 @@ que hay que avanzar haciendo experimentos en este sentido, probando
 con diferentes configuraciones, máquinas virtuales y parametrización
 de las mismas. Esto es algo que se propone como trabajo futuro.
 
-\section{Conclusiones y trabajo futuro}
-
 % - pedro -  ¿no hay sección de conclusiones y trabajos futuros como tal?
 
 % - pedro -  ¿no hay secci\'on de conclusiones y trabajos futuros como tal?
@@ -421,6 +415,16 @@ m\'aximo este tipo de operaciones, acercando m\'as la arquitectura propuesta a u
 Aunque los resultados obtenidos no son sorprendentes, nuestro objetivo no es superar la velocidad de las m\'aquinas dise\~nadas
 para computaci\'on paralela, sino simplemente probar que existe la posibilidad de ejecutar en paralelo con los recursos m\'inimos
 una aplicaci\'on cualquiera.
+
+Por otro lado, una vez más habrá que hacer un profiling extensivo de
+la aplicación para detectar los cuellos de botella y comprobar qué
+provoca retardos y en qué caso. También se comprobará con diferentes
+tipos de configuraciones que incluyan directorios sincronizados usando
+almacenamiento en la nube o directorios montados remotamente usando
+otro tipo de mecanismos. Eventualmente, lo que se pretende es crear un
+sistema que pueda distribuirse fácilmente entre diferentes ordenadores
+y crear experimentos distribuidos sin necesidad de ninguna compra ni
+de hardware ni de servicios. 
 
 \section{Agradecimientos}
 %Este trabajo est\'a apoyado por los proyectos 
