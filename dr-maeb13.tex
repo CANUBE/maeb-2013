@@ -22,11 +22,13 @@
 
 \title{Experimentación con algoritmos distribuidos usando herramientas libres y gratuitas}
 
-% \author{Dr. Juan Julián Merelo Guervós, Dra. Maribel García Arenas,
-% Pedro A. Castillo Valdivieso} \institute{Grupo GeNeura\\ Departamento
-% de Arquitectura y Tecnología de Computadores\\ Universidad de
-% Granada\\ \email{(jmerelo,maribel,pedro)@geneura.ugr.es} }
-\author{Diversos Autores}
+ \author{ Juan Julián Merelo Guervós,  Maribel García Arenas,
+ Pedro A. Castillo Valdivieso} 
+\institute{Grupo GeNeura\\ 
+Departamento de Arquitectura y Tecnología de Computadores\\ 
+Universidad de
+ Granada\\ 
+\email{(jmerelo,maribel,pedro)@geneura.ugr.es} }
 
 \begin{document}
 
@@ -77,7 +79,9 @@ operativo. En la práctica, podemos usar un disco duro remoto situado
 en la nube como si se tratara de un disco duro local. De esta forma,
 también simple y transparente al programador podemos paralelizar un
 algoritmo, simplemente usando una infraestructura de almacenamiento
-virtual. A la vez, en algunos casos estas infraestructuras son
+virtual, siempre que ese almacenamiento virtual sea visible desde
+varios ordenadores y tengamos alguna forma de iniciar la ejecución de
+los procesos en las diferentes máquinas de forma más o menos simultánea. A la vez, en algunos casos estas infraestructuras son
 gratuitas, bien por el hecho de que formen parte de la misma
 organización (discos conectados a la red, NAS o bien infraestructuras
 creadas con OpenStack u OpenNebula \cite{magaz2012opennebula}) o bien porque se trate de
@@ -86,25 +90,14 @@ de Dropbox, Ubuntu One u otros.
 
 En este trabajo mostramos la primera aproximación al uso de
 infraestructuras virtuales para la creación de experimentos de
-computación distribuida de forma gratuita. Estos experimentos los
-aplicaremos a un tipo de algoritmo denominado algoritmo genético. a un algoritmo genético canónico. 
-% - pedro - ¿no deberíamos referenciar los trabajos del dropbox anteriores?
+computación distribuida de forma gratuita; en este caso, para evitar
+problemas de sincronización, suponemos que desde un ordenador {\em
+  central} se tiene acceso a todos los nodos. Los nodos, en realidad
+varias máquinas virtuales dentro de un solo anfitrión (lo que, a
+efectos prácticos, no tiene más importancia que el hecho de que se
+trate de nodos heterogéneos) comparten directorios mediante Dropbox. Estos experimentos los
+aplicaremos  a un algoritmo genético canónico. 
 
-%AUTORES: M.G. Arenas, J.J. Merelo, A.M. Mora, P.A. Castillo, G. Romero, J.L.J. Laredo
-%TIÌTULO: Assessing speed-ups in commodity cloud storage services for distributed evolutionary algorithms TIPO DE PARTICIPACIOÌN: Oral
-%CONGRESO: 2011 IEEE Congress on Evolutionary Computation
-%PUBLICACIOÌN: isbn 978-1-4244-7833-0/11 pp.304-311. 2011
-
-%AUTORES: M. GarciÌa-Arenas, J.J. Merelo, Pedro A. Castillo, J.L.J. Laredo, G. Romero and Antonio Miguel Mora 
-%TIÌTULO: Using free cloud storage services for distributed evolutionary algorithms
-%CONGRESO: 13th Annual Genetic and Evolutionary Computation Conference, GECCO 2011
-%PUBLICACIOÌN: Proceedings, Dublin, Ireland, July 12-16, 2011. Natalio Krasnogor and Pier Luca Lanzi, Editors. ACM. pages 1603-1610. isbn 978-1-4503-0557-0. 2011
-
-%AUTORES: Maribel Garcia-Arenas, Pedro Castillo Valdivieso, Gustavo Romero Lopez and Juan Julian Merelo Guervos 
-%TIÌTULO: Cloud-based Evolutionary Parallel Computation using low cost storage services
-%PUBLICACIOÌN: IEEE First International Symposium on Network Cloud Computing and Applications. isbn: 978-0-7695-4550- 9/11. pp.56-61. 2011. DOI 10.1109/NCCA.2011.16. 2011
-
-%Sí se han referenciado por algún sitio - JJ
 Desde el punto de vista de este trabajo, lo interesante de los
 algoritmos evolutivos es que se prestan a una f\'acil paralelizaci\'on:
 simplemente dividiendo la poblaci\'on en grupos denominados {\em
@@ -122,7 +115,7 @@ un algoritmo genético secuencial clásico.
 Esto es precisamente lo que vamos a hacer en este trabajo. Usaremos un
 algoritmo genético  que, dividiendo su población en varias {\em islas}, intercambiará
 información a través de un directorio compartido. Ese directorio
-compartido podría sincronizado estar en un servicio tal como Dropbox, pero en este
+compartido podría estar  sincronizado  en un servicio tal como Dropbox, pero en este
 caso no haremos experimentos relacionados con esto, sino que nuestro
 objetivo es establecer el comportamiento de un algoritmo base con
 todos los procesos ejecutándose en el mismo ordenador.   % - pedro -
@@ -192,7 +185,7 @@ un lenguaje bastante adecuado para trabajar, en general, con
 algoritmos evolutivos teniendo una variedad de herramientas ya
 desarrolladas \cite{perl-ea} y resultando fácil la implementación de
 nuevas funciones, estructuras de datos u operadores. El hecho de
-trabajar con un diferente lenguaje, en todo caso, alterará las
+trabajar con un  lenguaje diferente, en todo caso, alterará las
 prestaciones de base, pero no tendría que tener tanta influencia sobre
 el escalado. 
 
@@ -201,8 +194,9 @@ cierto reto para un algoritmo genético y cuya evaluación también
 requiera cierto tiempo, de forma que el algoritmo necesite un número
 de evaluaciones alto que pueda mejorarse a base de la
 paralelización. Por eso la función elegida ha sido P-Peaks
-\cite{alba2002comparing}. En esta función se general aleatoriamente un conjunto
+\cite{JPS97}. En esta función se genera aleatoriamente un conjunto
 de $p$ cadenas binarias de longitud $b$. P-Peaks devuelve la distancia
+de Hamming (es decir, número de bits diferentes)
 a la cadena {\em más cercana}, es decir, el mínimo de las distancias
 medida a todas las cadenas. La función resulta {\em pesada} porque hay
 que medir distancias a un número determinado de cadenas y resulta
@@ -265,7 +259,7 @@ comunicación del final que tengan que propagarse y simplifica la
 programación que, en realidad, es exactamente la misma para el
 programa secuencial y el paralelo. El tiempo de ejecución se mide
 simplemente a través de la diferencia en segundos entre el tiempo de
-creación de dos ficheros que se crear, precisamente, al comenzar y
+creación de dos ficheros que se crean, precisamente, al comenzar y
 terminar este programa. 
 
 Para la versión paralela hace falta una {\em política de
@@ -281,14 +275,15 @@ establecer en el pasado \cite{jj:2008:PPSN}. De hecho, algunas pruebas
 hechas depositando el mejor en cada generación ha dado peores
 resultados, provocando que en la mayor parte de los casos no termine
 el algoritmo. La estrategia aleatoria, aparte de rápida (no necesita
-ordenar ni hacer ninguna otra operación) tiene la ventaja de la
+ordenar ni hacer ninguna otra operación, salvo la necesaria para
+extraer los 50 mejores, para lo que no hace falta ordenar la población) tiene la ventaja de la
 estrategia de depósito de cromosomas: no necesita tampoco llevar a
 cabo ningún cambio en el código para el caso paralelo.
 
 Tanto el código como el resultado de los experimentos (que
 analizaremos en la siguiente sección) están disponibles de forma
 abierta en la siguiente dirección:
-\url{https://code.launchpad.net/\~jjmerelo/simplea/trunk}. El objetivo
+\url{https://code.launchpad.net/~jjmerelo/simplea/trunk}. El objetivo
 es que la comunidad científica se beneficie de esta ciencia abierta no
 sólo en los resultados, sino también en los datos que podrán ser, en
 caso de desearlo, analizados de forma independiente. 
@@ -307,7 +302,8 @@ una mejora en la velocidad con el número de {\em nodos}. Esto se
 muestra en las Figuras \ref{fig:sm} y \ref{fig:toshiba}; en el primer
 caso los tiempos han sido tomados en un ordenador AMD con séxtuple
 núcleo ejecutando Ubuntu 12.04; en el segundo es un portátil Toshiba
-Portegé ejecutando el mismo sistema operativo y con un Intel i5 de
+Portegé ejecutando el mismo sistema operativo y con un Intel i5 con
+cuatro núcleos de
 procesador; en este caso el disco duro es un SSD lo que lo hace,
 teóricamente, más rápido que en el primer caso.
 
@@ -427,11 +423,12 @@ y crear experimentos distribuidos sin necesidad de ninguna compra ni
 de hardware ni de servicios. 
 
 \section{Agradecimientos}
-%Este trabajo est\'a apoyado por los proyectos 
-%TIN2011-28627-C04-02 del Ministerio espa\~nol de Ciencia y
-%Competitividad y por el P08-TIC-03903 del gobierno regional andaluz,
-%as\'i como el proyecto 83 (CANUBE) concedido por el CEI-BioTIC UGR
-%(\url{http://biotic.ugr.es}). 
+
+Este trabajo est\'a apoyado por los proyectos 
+TIN2011-28627-C04-02 del Ministerio espa\~nol de Ciencia y
+Competitividad y por el P08-TIC-03903 del gobierno regional andaluz,
+as\'i como el proyecto CEI2013-P-14 (CANUBE) concedido por el CEI-BioTIC UGR
+(\url{http://biotic.ugr.es}). 
 
 \bibliographystyle{plain}
 \bibliography{dr,geneura}
